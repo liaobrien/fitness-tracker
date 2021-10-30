@@ -6,7 +6,7 @@ const db = require('../models');
 // GET last workout
 router.get('/api/workouts', (req, res) => {
       db.Workout.find()
-            .sort({ id: -1 }) // the -1 puts the data in reverse chronological order
+            .sort({ day: 1 }) // the sort puts the data in reverse chronological order
             .then((workout) => {
                   res.status(200).json(workout);
             })
@@ -16,6 +16,9 @@ router.get('/api/workouts', (req, res) => {
 });
 
 // Add exercises to the most recent workout plan. (PUT?)
+// router.put('/api/workouts', (req, res) => {
+//       db.Workout.find()
+// })
 
 // Add new exercises to a new workout plan. (POST)
 
