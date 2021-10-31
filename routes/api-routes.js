@@ -14,6 +14,18 @@ router.get('/api/workouts', (req, res) => {
             })
 });
 
+// GET workouts in range
+router.get('/api/workouts/range', (req, res) => {
+      db.Workout.find()
+            .sort({ day: -1 }) // reverse chron. order
+            .then((workout) => {
+                  res.status(200).json(workout);
+            })
+            .catch((err) => {
+                  res.status(400).json(err);
+            })
+})
+
 
 // Add new exercises to a new workout plan. (POST)
 router.post('/api/workouts', ({ body }, res) => {
@@ -24,7 +36,7 @@ router.post('/api/workouts', ({ body }, res) => {
             .catch((err) => {
                   res.status(400).json(err);
             })
-})
+});
 
 // Add exercises to the most recent workout plan. (PUT?)
 // router.put('/api/workouts/:id', (req, res) => {
@@ -36,10 +48,6 @@ router.post('/api/workouts', ({ body }, res) => {
 
 //             }
 //       )
-// })
-
-// View the combined weight of multiple exercises from the past seven workouts on the stats page.
-
-// View the total duration of each workout from the past seven workouts on the stats page.
+// });
 
 module.exports = router;
