@@ -9,15 +9,15 @@ router.get('/api/workouts', (req, res) => {
             {
                   $addFields: {
                         totalDuration: {
-                              // $sum: ["$duration"] 
+                              $sum: '$exercises.duration'
 
-                              "$reduce": {
-                                    input: "$exercises",
-                                    initialValue: 0,
-                                    in: {
-                                          $add: ["$$value", "$$this.duration"]
-                                    }
-                              }
+                              // "$reduce": {
+                              //       input: "$exercises",
+                              //       initialValue: 0,
+                              //       in: {
+                              //             $add: ["$$value", "$$this.duration"]
+                              //       }
+                              // }
 
                         },
                   }
@@ -35,8 +35,25 @@ router.get('/api/workouts', (req, res) => {
 
 // GET - View the combined weight of multiple exercises from the past seven workouts on the stats page.
 router.get('/api/workouts/range', (req, res) => {
-      db.Workout.find()
-            .sort({ day: -1 }) // reverse chron. order
+      db.Workout.aggregate([
+            {
+                  $addFields: {
+                        totalDuration: {
+                              $sum: '$exercises.duration'
+
+                              // "$reduce": {
+                              //       input: "$exercises",
+                              //       initialValue: 0,
+                              //       in: {
+                              //             $add: ["$$value", "$$this.duration"]
+                              //       }
+                              // }
+
+                        },
+                  }
+            },
+      ])
+            .sort({ _id: -1 }) // reverse chron. order
             .limit(7)
             .then((workout) => {
                   res.status(200).json(workout);
