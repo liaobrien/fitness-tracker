@@ -18,6 +18,7 @@ router.get('/api/workouts', (req, res) => {
 router.get('/api/workouts/range', (req, res) => {
       db.Workout.find()
             .sort({ day: -1 }) // reverse chron. order
+            .limit(7)
             .then((workout) => {
                   res.status(200).json(workout);
             })
