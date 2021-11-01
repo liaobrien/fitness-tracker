@@ -5,7 +5,26 @@ const db = require('../models');
 
 // GET last workout
 router.get('/api/workouts', (req, res) => {
-      db.Workout.find()
+      db.Workout.aggregate([
+            {
+                  $addFields: {
+                        totalDuration: {
+                              // $sum: ["$duration"] 
+
+                              "$reduce": {
+                                    input: "$exercises",
+                                    initialValue: 0,
+                                    in: {
+                                          $add: ["$$value", "$$this.duration"]
+                                    }
+                              }
+
+                        },
+                  }
+            },
+      ])
+            // .sort({ day: -1 })
+            // .limit(1)
             .then((workout) => {
                   res.status(200).json(workout);
             })
@@ -28,7 +47,23 @@ router.get('/api/workouts/range', (req, res) => {
 });
 
 // GET - View the total duration of each workout from the past seven workouts on the stats page.
-// i'll probably need the aggregate stuff in this one
+// router.get('/api/workouts/range', (req, res) => {
+//       db.Workout.aggregate([
+//             {
+//                   $addFields: {
+//                         totalDuration: { $sum: ["$duration"] },
+//                   }
+//             },
+//       ])
+//             .sort({ day: -1 }) // reverse chron. order
+//             .limit(7)
+//             .then((workout) => {
+//                   res.status(200).json(workout);
+//             })
+//             .catch((err) => {
+//                   res.status(400).json(err);
+//             })
+// });
 
 
 // Add new exercises to a new workout plan. (POST)
@@ -54,7 +89,8 @@ router.put('/api/workouts/:id', (req, res) => {
                   }
             },
             {
-                  new: true // return the workout with the update
+                  new: true, // return the workout with the update
+                  runValidators: true
             }
       )
             .then((workout) => {
