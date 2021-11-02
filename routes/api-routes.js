@@ -36,7 +36,7 @@ router.get('/api/workouts/range', (req, res) => {
                   }
             },
       ])
-            .sort({ _id: -1 }) // reverse chron. order
+            .sort({ _id: 1 }) // chron. order
             .limit(7)
             .then((workout) => {
                   res.status(200).json(workout);
