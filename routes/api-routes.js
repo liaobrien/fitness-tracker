@@ -10,15 +10,6 @@ router.get('/api/workouts', (req, res) => {
                   $addFields: {
                         totalDuration: {
                               $sum: '$exercises.duration'
-
-                              // "$reduce": {
-                              //       input: "$exercises",
-                              //       initialValue: 0,
-                              //       in: {
-                              //             $add: ["$$value", "$$this.duration"]
-                              //       }
-                              // }
-
                         },
                   }
             },
@@ -34,21 +25,13 @@ router.get('/api/workouts', (req, res) => {
 });
 
 // GET - View the combined weight of multiple exercises from the past seven workouts on the stats page.
+// GET - View the total duration of each workout from the past seven workouts on the stats page.
 router.get('/api/workouts/range', (req, res) => {
       db.Workout.aggregate([
             {
                   $addFields: {
                         totalDuration: {
                               $sum: '$exercises.duration'
-
-                              // "$reduce": {
-                              //       input: "$exercises",
-                              //       initialValue: 0,
-                              //       in: {
-                              //             $add: ["$$value", "$$this.duration"]
-                              //       }
-                              // }
-
                         },
                   }
             },
@@ -63,24 +46,7 @@ router.get('/api/workouts/range', (req, res) => {
             })
 });
 
-// GET - View the total duration of each workout from the past seven workouts on the stats page.
-// router.get('/api/workouts/range', (req, res) => {
-//       db.Workout.aggregate([
-//             {
-//                   $addFields: {
-//                         totalDuration: { $sum: ["$duration"] },
-//                   }
-//             },
-//       ])
-//             .sort({ day: -1 }) // reverse chron. order
-//             .limit(7)
-//             .then((workout) => {
-//                   res.status(200).json(workout);
-//             })
-//             .catch((err) => {
-//                   res.status(400).json(err);
-//             })
-// });
+
 
 
 // Add new exercises to a new workout plan. (POST)
@@ -107,7 +73,6 @@ router.put('/api/workouts/:id', (req, res) => {
             },
             {
                   new: true, // return the workout with the update
-                  runValidators: true
             }
       )
             .then((workout) => {
