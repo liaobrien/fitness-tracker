@@ -14,8 +14,8 @@ router.get('/api/workouts', (req, res) => {
                   }
             },
       ])
-            // .sort({ day: -1 })
-            // .limit(1)
+            .sort({ _id: -1 })
+            .limit(1)
             .then((workout) => {
                   res.status(200).json(workout);
             })
