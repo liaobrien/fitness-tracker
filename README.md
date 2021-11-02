@@ -13,7 +13,6 @@ This is a full-stack application that logs and tracks a user's workouts over tim
 ## Table of Contents
 
 - [Installation](#installation)
-- [Tests](#tests)
 - [Usage](#usage)
 - [Credits](#credits)
 - [License](#license)
