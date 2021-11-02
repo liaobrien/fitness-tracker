@@ -1,8 +1,6 @@
 const router = require('express').Router();
 const db = require('../models');
 
-// I think I will need the following:
-
 // GET last workout
 router.get('/api/workouts', (req, res) => {
       db.Workout.aggregate([
